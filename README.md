@@ -1,54 +1,47 @@
-# FT_PAY_02 — Procesamiento / Validación de pago
+# Groups · Prototipo de la beta cerrada
 
-Prototipo web (React) de la pantalla **IMG_PAY_02** del flujo *Reserva / Pago confirmado*,
-construido a partir de la ficha técnica v1.1 (Producto: 02 Groups · Módulo: Reserva/Pago).
+Prototipo navegable (React + Vite) de las **18 pantallas de la beta cerrada**, interpretadas desde
+`PRO_RESUMEN_MAESTRO_v25_CIERRE.xlsx`. Sirve para revisar con el equipo si la lectura del Maestro
+es la correcta antes de programar en serio.
 
-## Qué incluye
+## Qué se ve
 
-- Stepper de 5 pasos con el paso 2 activo.
-- Estado "Validando tu pago..." con tarjeta de método de pago y verificación anti-fraude.
-- Countdown en vivo del hold de la reserva (`PAY_08 holdExpiresAt`), que libera el cupo
-  automáticamente (`payment_timeout`) si expira.
-- Reintentos limitados a 3 intentos, según la regla de persistencia de la ficha.
-- Panel lateral **simulador de webhook** para disparar manualmente los eventos
-  `payment_succeeded`, `payment_failed`, `payment_timeout`, `payment_canceled`
-  (equivalente a `payment.notification` en la ficha).
-- Estado de sincronización y log de eventos analíticos en vivo (sección 16 de la ficha).
+- **Centro:** el teléfono con la app. Barra inferior definitiva de v25 (Inicio, Explorar, Crear,
+  Grupos, Chats); Perfil se abre desde el avatar. Crear y Chats aparecen marcadas como Lanzamiento.
+- **Izquierda:** índice de las 18 pantallas de la beta (las marcadas `rev` siguen EN REVISIÓN en el
+  Maestro) más la página pública del enlace de invitación.
+- **Derecha:** la ficha del Maestro de la pantalla abierta (fase, estados, descripción, flujo,
+  estados por cubrir), **cómo la interpreté** y los **huecos o contradicciones** que encontré.
+  Debajo, controles para simular carga, vacío, error, la llegada por invitación, los estados de
+  GR_03 y un invitado que se une al grupo.
 
-## Estructura
+## Ciclo para probar
 
+1. En AU_01 activa "Llegué por invitación" → Continuar → registro → código (cualquiera; `000000`
+   falla) → intereses → aterriza en GR_03 con la invitación conservada.
+2. En GR_03 toca Compartir: hoja con WhatsApp (abre wa.me con el mensaje), Instagram, TikTok y
+   copiar enlace; "Ver lo que recibe el invitado" muestra la página pública.
+3. Desde Inicio, abre Lucas: si lo que pides calza con algo, muestra la experiencia; si no, ofrece
+   crear el grupo (demanda) y te lleva a GR_03.
+
+Datos de demo: contraseña `error` en AU_02 y correo `ya@groups.app` en AU_03 simulan errores.
+
+## Archivos
+
+- `src/data/maestro.json` — las filas del Maestro (extraídas del Excel v25).
+- `src/data/interpretacion.js` — supuestos y huecos por pantalla. Es lo que hay que discutir.
+- `src/screens.jsx` — las pantallas.
+- `src/App.jsx` — navegación, ficha y simulador.
+- `src/PaymentProcessingScreen.jsx` — pantalla de pago previa (RS_02, Lanzamiento), accesible
+  desde "Reservar" en EX_03.
+
+## Correr y publicar
+
+```bash
+npm install
+npm run dev      # http://localhost:5173
+npm run build    # genera dist/
 ```
-ft-pay-02/
-├── README.md
-├── package.json
-└── src/
-    └── PaymentProcessingScreen.jsx
-```
 
-## Uso
-
-Este componente es un archivo React (`.jsx`) autocontenido pensado para integrarse en
-cualquier proyecto React existente (Vite, Next.js, Create React App, etc.):
-
-1. Copia `src/PaymentProcessingScreen.jsx` dentro de tu proyecto.
-2. Instala la dependencia de íconos:
-   ```bash
-   npm install lucide-react
-   ```
-3. Impórtalo y úsalo:
-   ```jsx
-   import PaymentProcessingScreen from "./PaymentProcessingScreen";
-
-   export default function App() {
-     return <PaymentProcessingScreen />;
-   }
-   ```
-
-## Pendiente / notas
-
-- La ficha original especifica el archivo Flutter `payment_processing_screen.dart`
-  (`PaymentProcessingScreen` / `PaymentProcessingController`). Este repo contiene la
-  versión web/React equivalente; la versión Flutter se puede generar aparte si se necesita
-  para la app móvil real.
-- Las integraciones reales (webhook/callback del gateway, servicio de reservas) no están
-  conectadas — el panel "Simulador de webhook" las reemplaza para fines de demo y QA.
+En Vercel: importar el repo, framework **Vite** (se detecta solo), build `npm run build`,
+salida `dist`. No necesita variables de entorno.

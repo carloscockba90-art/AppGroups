@@ -1,11 +1,21 @@
 {
-  "name": "ft-pay-02-payment-processing-screen",
-  "version": "1.1.0",
-  "description": "Pantalla IMG_PAY_02 - Procesamiento / Validacion de pago (Reserva / Pago confirmado)",
-  "main": "src/PaymentProcessingScreen.jsx",
+  "name": "groups-beta-prototype",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Prototipo navegable de la beta cerrada de Groups, interpretado desde PRO_RESUMEN_MAESTRO v25",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
   "dependencies": {
-    "lucide-react": "^0.383.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "lucide-react": "0.383.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "4.3.4",
+    "vite": "5.4.11"
   }
 }
